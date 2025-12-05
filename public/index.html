@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Utkarsh Tripathy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #141414;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Landing Screen */
+    .landing-screen {
+      min-height: 100vh;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8), #141414),
+                  url('https://app.grapesjs.com/api/assets/random-image?query=%22cinematic%20dark%20abstract%20netflix%22&w=1920&h=1080') center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .landing-container {
+      text-align: center;
+      z-index: 2;
+    }
+
+    .landing-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      letter-spacing: 4px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      background: linear-gradient(to right, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .landing-subtitle {
+      color: #999;
+      font-size: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .profile-card-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-card-button:hover {
+      transform: scale(1.05);
+    }
+
+    .profile-card {
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 3px solid transparent;
+      transition: border-color 0.3s ease;
+      position: relative;
+    }
+
+    .profile-card-button:hover .profile-card {
+      border-color: #e50914;
+    }
+
+    .profile-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      color: #999;
+      transition: color 0.3s ease;
+    }
+
+    .profile-card-button:hover .profile-name {
+      color: #fff;
+    }
+
+    /* Main Interface */
+    .main-interface {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .main-interface.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+    
+    .landing-screen.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Header */
+    .header-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: linear-gradient(to bottom, rgba(20,20,20,0.95) 0%, transparent 100%);
+      padding: 1rem 0;
+      transition: background 0.3s ease;
+    }
+
+    .header-navbar.scrolled {
+      background: rgba(20,20,20,0.98);
+    }
+
+    .navbar-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 1.75rem;
+      letter-spacing: 1px;
+      color: #e50914;
+    }
+
+    .primary-nav {
+      display: flex;
+      gap: 2rem;
+      margin-left: 3rem;
+    }
+
+    .primary-nav a {
+      color: #e5e5e5;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .primary-nav a:hover {
+      color: #fff;
+    }
+
+    .search-and-profile {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-input {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      border-radius: 4px;
+      width: 250px;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #fff;
+      background: rgba(0,0,0,0.8);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      opacity: 0.6;
+    }
+
+    .profile-dropdown-trigger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .profile-mini-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .profile-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 1rem);
+      right: 0;
+      background: rgba(0,0,0,0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      min-width: 200px;
+      padding: 0.5rem 0;
+    }
+
+    .profile-dropdown-panel a,
+    .profile-dropdown-panel button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      color: #fff;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .profile-dropdown-panel a:hover,
+    .profile-dropdown-panel button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Featured Banner */
+    .featured-banner {
+      margin-top: 0;
+      position: relative;
+      height: 80vh;
+      min-height: 600px;
+    }
+
+    .featured-media-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .featured-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .featured-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(20,20,20,0.9) 0%, transparent 50%, rgba(20,20,20,0.9) 100%),
+                  linear-gradient(to top, rgba(20,20,20,0.95) 0%, transparent 60%);
+    }
+
+    .featured-content {
+      position: absolute;
+      bottom: 35%;
+      left: 4%;
+      max-width: 500px;
+      z-index: 10;
+    }
+
+    .featured-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    }
+
+    .featured-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+    }
+
+    .featured-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .featured-cta-primary,
+    .featured-cta-secondary {
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .featured-cta-primary {
+      background: #e50914;
+      color: #fff;
+    }
+
+    .featured-cta-primary:hover {
+      background: #f40612;
+      transform: scale(1.05);
+    }
+
+    .featured-cta-secondary {
+      background: rgba(109,109,110,0.7);
+      color: #fff;
+      border: none;
+    }
+
+    .featured-cta-secondary:hover {
+      background: rgba(109,109,110,0.9);
+    }
+
+    /* Project Rows */
+    .projects-row-section-first-year,
+    .projects-row-section-second-year {
+      padding: 3rem 4%;
+    }
+
+    .row-header,
+    .row-header-second {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .row-title-first,
+    .row-title-second {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #e5e5e5;
+    }
+
+    .row-hint,
+    .row-hint-second {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .row-scroll-container-first,
+    .row-scroll-container-second {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      scroll-behavior: smooth;
+    }
+
+    .row-scroll-container-first::-webkit-scrollbar,
+    .row-scroll-container-second::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .row-scroll-container-first::-webkit-scrollbar-track,
+    .row-scroll-container-second::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .row-scroll-container-first::-webkit-scrollbar-thumb,
+    .row-scroll-container-second::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+
+    /* Project Cards */
+    .project-card {
+      min-width: 300px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+      z-index: 10;
+    }
+
+    .project-card-media {
+      position: relative;
+      height: 170px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .project-card video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .project-card:hover video {
+      opacity: 1;
+    }
+
+    .project-card-body {
+      padding: 1rem;
+    }
+
+    .project-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .project-card-desc {
+      font-size: 0.9rem;
+      color: #999;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+
+    .project-card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .project-card button {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .project-card button:first-child {
+      background: #fff;
+      color: #000;
+    }
+
+    .project-card button:first-child:hover {
+      background: #e5e5e5;
+    }
+
+    .project-card button:last-child {
+      background: rgba(109,109,110,0.7);
+      color: #fff;
+    }
+
+    .project-card button:last-child:hover {
+      background: rgba(109,109,110,0.9);
+    }
+
+    /* About Section */
+    .about-section {
+      padding: 4rem 4%;
+      background: linear-gradient(to bottom, #141414 0%, #0a0a0a 100%);
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-figure {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .about-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    .about-heading {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .about-paragraph-1,
+    .about-paragraph-2 {
+      color: #b3b3b3;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .about-actions {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .about-cta-projects,
+    .about-cta-contact {
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .about-cta-projects {
+      background: #e50914;
+      color: #fff;
+    }
+
+    .about-cta-projects:hover {
+      background: #f40612;
+      transform: translateY(-2px);
+    }
+
+    .about-cta-contact {
+      background: rgba(109,109,110,0.7);
+      color: #fff;
+    }
+
+    .about-cta-contact:hover {
+      background: rgba(109,109,110,0.9);
+    }
+
+    /* Skills Section */
+    .skills-section {
+      padding: 4rem 4%;
+      background: #141414;
+    }
+
+    .skills-header {
+      max-width: 1200px;
+      margin: 0 auto 3rem;
+    }
+
+    .skills-heading {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .skills-subtitle {
+      color: #999;
+      font-size: 1.1rem;
+    }
+
+    .skills-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .skill-card:hover {
+      border-color: #e50914;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(229,9,20,0.2);
+    }
+
+    .skill-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-card img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .skill-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .skill-description {
+      color: #b3b3b3;
+      line-height: 1.6;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 4rem 4%;
+      background: linear-gradient(to bottom, #141414 0%, #0a0a0a 100%);
+    }
+
+    .contact-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .contact-heading {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .contact-intro {
+      color: #b3b3b3;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-detail-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-detail-item img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .contact-email,
+    .contact-phone,
+    .contact-location {
+      font-size: 1.1rem;
+    }
+
+    .contact-figure {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .contact-reference-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    /* Footer */
+    .footer {
+      background: #000;
+      padding: 2rem 4%;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #808080;
+    }
+
+    /* Settings Modal */
+    .settings-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 200;
+    }
+
+    .settings-modal-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      z-index: 201;
+    }
+
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .settings-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .settings-close-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+
+    .settings-close-button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .settings-close-button img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .setting-label {
+      font-size: 1rem;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .settings-done-button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0.75rem;
+      background: #e50914;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .settings-done-button:hover {
+      background: #f40612;
+    }
+
+    @media (max-width: 768px) {
+      .landing-title {
+        font-size: 2.5rem;
+      }
+
+      .primary-nav {
+        display: none;
+      }
+
+      .featured-title {
+        font-size: 2rem;
+      }
+
+      .about-container,
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Landing Screen -->
+  <section id="landing" class="landing-screen">
+    <div class="landing-container">
+      <h1 class="landing-title">Who's Watching?</h1>
+      <p class="landing-subtitle">Select a profile to enter portfolio</p>
+      <div style="margin-top: 3rem;">
+        <button type="button" id="enterProfile" class="profile-card-button">
+          <div class="profile-card">
+            <img src="https://cdn.grapesjs.com/workspaces/cmg9erygb01751u27ogx4zx7h/assets/5e84237c-96f6-4aa5-bbe4-764f95ed55ba__download-1.jpeg" alt="Utkarsh Tripathy" class="profile-image"/>
+          </div>
+          <div class="profile-name">Utkarsh Tripathy</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Interface -->
+  <section id="app" class="main-interface hidden">
+    <!-- Header -->
+    <header class="header-navbar">
+      <div class="navbar-container">
+        <div style="display: flex; align-items: center;">
+          <a href="#" class="brand-link">
+            <span>P</span>
+          </a>
+          <nav class="primary-nav">
+            <a href="#">Home</a>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </div>
+        <div class="search-and-profile">
+          <div class="search-wrapper">
+            <img src="https://api.iconify.design/lucide-search.svg" alt="Search" class="search-icon"/>
+            <input type="text" id="searchInput" placeholder="Search projects" class="search-input"/>
+          </div>
+          <div style="position: relative;">
+            <button type="button" id="profileMenuBtn" class="profile-dropdown-trigger">
+              <img src="https://app.grapesjs.com/api/assets/random-image?query=%22founder%20at%20desk%20using%20laptop%20in%20co-working%20space%20portrait%22&w=200&h=200" alt="Avatar" class="profile-mini-avatar"/>
+              <img src="https://api.iconify.design/lucide-chevron-down.svg" alt="Menu" style="width: 16px; height: 16px;"/>
+            </button>
+            <div id="profileMenu" class="profile-dropdown-panel hidden">
+              <a href="#about">About Me</a>
+              <a href="#skills">Skills</a>
+              <a href="#contact">Contact Info</a>
+              <button type="button" id="openSettings">Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Banner -->
+    <section class="featured-banner">
+      <div class="featured-media-wrapper">
+        <video id="featuredVideo" autoplay muted loop playsinline class="featured-video"></video>
+        <div class="featured-overlay"></div>
+        <div class="featured-content">
+          <h2 class="featured-title">Welcome, Utkarsh</h2>
+          <p class="featured-description">Explore this portfolio of projects across web apps, APIs, and full-stack platforms.</p>
+          <div class="featured-actions">
+            <a href="#first-year" class="featured-cta-primary">▶ Start Browsing</a>
+            <a href="#about" class="featured-cta-secondary">ⓘ About Me</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+      <!-- First Year Projects -->
+      <section id="first-year" class="projects-row-section-first-year">
+        <div class="row-header">
+          <h3 class="row-title-first">First-Year Projects & Basics</h3>
+          <span class="row-hint">Scroll horizontally →</span>
+        </div>
+        <div id="rowFirst" class="row-scroll-container-first"></div>
+      </section>
+
+      <!-- Second Year Projects -->
+      <section id="second-year" class="projects-row-section-second-year">
+        <div class="row-header-second">
+          <h3 class="row-title-second">Second-Year Projects (Flask & Django)</h3>
+          <span class="row-hint-second">Scroll horizontally →</span>
+        </div>
+        <div id="rowSecond" class="row-scroll-container-second"></div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="about-section">
+        <div class="about-container">
+          <div class="about-media-column">
+            <figure class="about-figure">
+              <img src="https://app.grapesjs.com/api/assets/random-image?query=%22developer%20coding%20on%20laptop%20cinematic%20lighting%20studio%22&w=900&h=600" alt="About" class="about-image"/>
+            </figure>
+          </div>
+          <div class="about-content-column">
+            <h2 class="about-heading">About Me</h2>
+            <p class="about-paragraph-1">
+              I'm Utkarsh Tripathy, a student of SRM Institute of Science and Technology. Trying not to break the internet—so far, 93% successful.
+            </p>
+            <p class="about-paragraph-2">
+              I enjoy building smooth interfaces, performant backends, and automation that just works. Outside of code, I explore design systems and the craft of delightful interactions.
+            </p>
+            <div class="about-actions">
+              <a href="#first-year" class="about-cta-projects">View Projects</a>
+              <a href="#contact" class="about-cta-contact">Get in Touch</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="skills" class="skills-section">
+        <div class="skills-header">
+          <h2 class="skills-heading">Skills & Tools</h2>
+          <span class="skills-subtitle">Focused on web apps, APIs, and full-stack delivery</span>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-card-header">
+              <img src="https://api.iconify.design/lucide-code.svg" alt="Code"/>
+              <strong class="skill-title">Frontend</strong>
+            </div>
+            <p class="skill-description">HTML, CSS, Tailwind, JS, responsive UI, accessibility.</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-header">
+              <img src="https://api.iconify.design/lucide-server.svg" alt="Server"/>
+              <strong class="skill-title">Backend</strong>
+            </div>
+            <p class="skill-description">Python, Flask, Django, REST APIs, auth, ORM.</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-header">
+              <img src="https://api.iconify.design/lucide-database.svg" alt="Database"/>
+              <strong class="skill-title">Data & Storage</strong>
+            </div>
+            <p class="skill-description">SQL, SQLite, PostgreSQL basics, cloud storage.</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-header">
+              <img src="https://api.iconify.design/lucide-wrench.svg" alt="Tools"/>
+              <strong class="skill-title">Tooling</strong>
+            </div>
+            <p class="skill-description">Git, CI basics, testing, deployment fundamentals.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="contact-section">
+        <div class="contact-container">
+          <div class="contact-info-column">
+            <h2 class="contact-heading">Contact</h2>
+            <p class="contact-intro">Reach out for collaborations, freelance work, or just to say hi.</p>
+            <div class="contact-details-list">
+              <div class="contact-detail-item">
+                <img src="https://api.iconify.design/lucide-mail.svg" alt="Email"/>
+                <span class="contact-email">utkarshtripathy1030@gmail.com</span>
+              </div>
+              <div class="contact-detail-item">
+                <img src="https://api.iconify.design/lucide-phone.svg" alt="Phone"/>
+                <span class="contact-phone">+91 99969 80193</span>
+              </div>
+              <div class="contact-detail-item">
+                <img src="https://api.iconify.design/lucide-map-pin.svg" alt="Location"/>
+                <span class="contact-location">Chennai, India</span>
+              </div>
+            </div>
+          </div>
+          <div class="contact-visual-column">
+            <figure class="contact-figure">
+              <img src="https://app.grapesjs.com/api/assets/random-image?query=%22minimal%20workspace%20phone%20email%20contact%20dark%20aesthetic%22&w=1200&h=700" alt="Contact" class="contact-reference-image"/>
+            </figure>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <span>portfolio • Utkarsh Tripathy</span>
+        <span>© <span id="yearSpan"></span> All rights reserved.</span>
+      </div>
+    </footer>
+  </section>
+
+  <!-- Settings Modal -->
+  <section id="settingsOverlay" class="settings-modal-overlay hidden"></section>
+  <section id="settingsModal" class="settings-modal-panel hidden">
+    <div class="settings-header">
+      <h3 class="settings-title">Settings</h3>
+      <button type="button" id="closeSettings" class="settings-close-button">
+        <img src="https://api.iconify.design/lucide-x.svg" alt="Close"/>
+      </button>
+    </div>
+    <div class="settings-content">
+      <div class="setting-row">
+        <span class="setting-label">Autoplay previews</span>
+        <label class="toggle-label">
+          <input type="checkbox" id="toggleAutoplay" checked/>
+          <span>On</span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Theme</span>
+        <span>Dark</span>
+      </div>
+    </div>
+    <div class="settings-footer">
+      <button type="button" id="doneSettings" class="settings-done-button">Done</button>
+    </div>
+  </section>
+
+  <script>
+    const landing = document.getElementById('landing');
+    const app = document.getElementById('app');
+    const enterProfile = document.getElementById('enterProfile');
+    const profileMenuBtn = document.getElementById('profileMenuBtn');
+    const profileMenu = document.getElementById('profileMenu');
+    const openSettingsBtn = document.getElementById('openSettings');
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const closeSettingsBtn = document.getElementById('closeSettings');
+    const doneSettingsBtn = document.getElementById('doneSettings');
+    const toggleAutoplay = document.getElementById('toggleAutoplay');
+    const featuredVideo = document.getElementById('featuredVideo');
+    const searchInput = document.getElementById('searchInput');
+    const rowFirst = document.getElementById('rowFirst');
+    const rowSecond = document.getElementById('rowSecond');
+    const yearSpan = document.getElementById('yearSpan');
+
+    yearSpan.textContent = new Date().getFullYear();
+
+    const sampleVideos = [
+      'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+      'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+      'https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+    ];
+
+    function pick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    const projectsFirst = [
+      {
+        title: 'Weather App',
+        desc: 'Real-time weather by city and geolocation.',
+        query: 'weather%20app%20ui%20dashboard%20dark',
+        video: true
+      },
+      {
+        title: 'Calculator',
+        desc: 'Responsive calculator with history.',
+        query: 'calculator%20app%20ui%20dark',
+        video: false
+      },
+      {
+        title: 'Password Encryption Tool',
+        desc: 'Hash and salt generator for secure storage.',
+        query: 'cybersecurity%20encryption%20interface',
+        video: true
+      },
+      {
+        title: 'Background Remover Website',
+        desc: 'Upload image and remove background with AI.',
+        query: 'photo%20editing%20website%20interface',
+        video: true
+      },
+      {
+        title: 'Movie Recommendation App',
+        desc: 'Content-based filtering for films.',
+        query: 'movie%20app%20cards%20poster%20grid',
+        video: true
+      },
+      {
+        title: 'Personal Blog Website',
+        desc: 'Markdown blog with tags and search.',
+        query: 'minimal%20blog%20website%20dark',
+        video: false
+      },
+      {
+        title: 'To-Do List with Cloud Storage',
+        desc: 'Sync tasks across devices.',
+        query: 'todo%20list%20app%20dark%20ui',
+        video: false
+      },
+      {
+        title: 'Quiz App with Timer and Scoring',
+        desc: 'Timed quizzes with analytics.',
+        query: 'quiz%20app%20mobile%20ui',
+        video: true
+      },
+      {
+        title: 'Dynamic Portfolio Website',
+        desc: 'Animated sections and projects feed.',
+        query: 'portfolio%20website%20showcase%20ui',
+        video: true
+      }
+    ];
+
+    const projectsSecond = [
+      {
+        title: 'Flask-based Blog Platform',
+        desc: 'Auth, comments, admin panel.',
+        query: 'flask%20blog%20dashboard%20ui%20dark',
+        video: true
+      },
+      {
+        title: 'Django E-commerce Website',
+        desc: 'Cart, checkout, payments.',
+        query: 'ecommerce%20website%20product%20grid%20dark',
+        video: true
+      },
+      {
+        title: 'Flask REST API for Movies Database',
+        desc: 'CRUD with pagination and auth.',
+        query: 'api%20documentation%20swagger%20dark',
+        video: false
+      },
+      {
+        title: 'Django Social Media App',
+        desc: 'Posts, follows, realtime feed.',
+        query: 'social%20media%20app%20dark%20ui',
+        video: true
+      },
+      {
+        title: 'Task Manager with Flask + DB',
+        desc: 'CRUD tasks, filters, roles.',
+        query: 'task%20manager%20kanban%20dark',
+        video: false
+      },
+      {
+        title: 'Portfolio CMS with Django',
+        desc: 'Manage projects and content.',
+        query: 'cms%20dashboard%20dark%20ui',
+        video: true
+      }
+    ];
+
+    function buildCard(p) {
+      const thumb = `https://app.grapesjs.com/api/assets/random-image?query=%22${p.query}%22&w=400&h=250`;
+      const hasVideo = p.video && Math.random() > 0.4;
+      const videoSrc = hasVideo ? pick(sampleVideos) : '';
+
+      const card = document.createElement('article');
+      card.className = 'project-card';
+      card.setAttribute('data-title', p.title.toLowerCase());
+
+      const media = document.createElement('div');
+      media.className = 'project-card-media';
+
+      const img = document.createElement('img');
+      img.src = thumb;
+      img.alt = p.title;
+      media.appendChild(img);
+
+      if (hasVideo) {
+        const video = document.createElement('video');
+        video.src = videoSrc;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        media.appendChild(video);
+
+        card.addEventListener('mouseenter', () => {
+          video.play().catch(() => {});
+        });
+        card.addEventListener('mouseleave', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      }
+
+      const body = document.createElement('div');
+      body.className = 'project-card-body';
+
+      const title = document.createElement('h4');
+      title.className = 'project-card-title';
+      title.textContent = p.title;
+
+      const desc = document.createElement('p');
+      desc.className = 'project-card-desc';
+      desc.textContent = p.desc;
+
+      const actions = document.createElement('div');
+      actions.className = 'project-card-actions';
+
+      const openBtn = document.createElement('button');
+      openBtn.textContent = 'Open';
+
+      const detailsBtn = document.createElement('button');
+      detailsBtn.textContent = 'Details';
+
+      actions.appendChild(openBtn);
+      actions.appendChild(detailsBtn);
+
+      body.appendChild(title);
+      body.appendChild(desc);
+      body.appendChild(actions);
+
+      card.appendChild(media);
+      card.appendChild(body);
+
+      return card;
+    }
+
+    function renderRows() {
+      rowFirst.innerHTML = '';
+      rowSecond.innerHTML = '';
+      shuffle(projectsFirst).forEach(p => rowFirst.appendChild(buildCard(p)));
+      shuffle(projectsSecond).forEach(p => rowSecond.appendChild(buildCard(p)));
+    }
+
+    function initFeatured() {
+      featuredVideo.src = pick(sampleVideos);
+    }
+
+    function filterCards(q) {
+      const allCards = document.querySelectorAll('.project-card');
+      const query = q.trim().toLowerCase();
+      allCards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        if (!query || title.includes(query)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Scroll header effect
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.header-navbar');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    enterProfile.addEventListener('click', () => {
+      landing.classList.add('fade-out');
+      setTimeout(() => {
+        landing.classList.add('hidden');
+        app.classList.remove('hidden');
+        app.classList.add('active');
+        initFeatured();
+        renderRows();
+      }, 300);
+    });
+
+    profileMenuBtn.addEventListener('click', () => {
+      profileMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileMenu.contains(e.target) && !profileMenuBtn.contains(e.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+    openSettingsBtn.addEventListener('click', () => {
+      settingsOverlay.classList.remove('hidden');
+      settingsModal.classList.remove('hidden');
+      profileMenu.classList.add('hidden');
+    });
+
+    function closeSettings() {
+      settingsOverlay.classList.add('hidden');
+      settingsModal.classList.add('hidden');
+    }
+
+    settingsOverlay.addEventListener('click', closeSettings);
+    closeSettingsBtn.addEventListener('click', closeSettings);
+    doneSettingsBtn.addEventListener('click', closeSettings);
+
+    toggleAutoplay.addEventListener('change', () => {
+      const videos = document.querySelectorAll('video');
+      videos.forEach(v => {
+        if (toggleAutoplay.checked) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    });
+
+    searchInput.addEventListener('input', (e) => filterCards(e.target.value));
+
+    // Scroll hint functionality
+    document.querySelectorAll('.row-hint, .row-hint-second').forEach(hint => {
+      hint.style.cursor = 'pointer';
+      hint.style.transition = 'opacity 0.2s ease';
+      
+      hint.addEventListener('click', function() {
+        const section = this.closest('.projects-row-section-first-year') || this.closest('.projects-row-section-second-year');
+        const container = section.querySelector('.row-scroll-container-first') || section.querySelector('.row-scroll-container-second');
+        container.scrollBy({ left: 320, behavior: 'smooth' });
+      });
+
+      hint.addEventListener('mouseenter', function() {
+        this.style.opacity = '0.7';
+      });
+
+      hint.addEventListener('mouseleave', function() {
+        this.style.opacity = '1';
+      });
+    });
+  </script>
+</body>
+</html>
